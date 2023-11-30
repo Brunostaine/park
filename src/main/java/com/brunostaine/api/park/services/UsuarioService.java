@@ -1,6 +1,8 @@
 package com.brunostaine.api.park.services;
 
 import com.brunostaine.api.park.entity.Usuario;
+import com.brunostaine.api.park.exceptions.EntityNotFoundException;
+import com.brunostaine.api.park.exceptions.UsernameUniqueViolationException;
 import com.brunostaine.api.park.repository.UsuarioRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -15,12 +17,18 @@ public class UsuarioService {
     private final UsuarioRepository usuarioRepository;
     @Transactional
     public Usuario salvar(Usuario usuario) {
-        return usuarioRepository.save(usuario);
+        try {
+            return usuarioRepository.save(usuario);
+        } catch (org.springframework.dao.DataIntegrityViolationException ex) {
+            throw new UsernameUniqueViolationException(String.format("Username {%s} já cadastrado.", usuario.getUsername()));
+        }
+
+
     }
     @Transactional
     public Usuario buscarPorId(Long id) {
         return usuarioRepository.findById(id).orElseThrow(
-                () -> new RuntimeException("Usuário não encontrado.")
+                () -> new EntityNotFoundException(String.format("Usuário id=%s não encontrado.", id))
         );
     }
     @Transactional
