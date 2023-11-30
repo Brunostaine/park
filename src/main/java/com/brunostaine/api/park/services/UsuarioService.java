@@ -6,6 +6,9 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
+
 @RequiredArgsConstructor
 @Service
 public class UsuarioService {
@@ -26,5 +29,9 @@ public class UsuarioService {
         Usuario user = buscarPorId(id);
         user.setPassword(password);
         return user;
+    }
+    @Transactional
+    public List<Usuario> buscarTodos() {
+        return usuarioRepository.findAll();
     }
 }
