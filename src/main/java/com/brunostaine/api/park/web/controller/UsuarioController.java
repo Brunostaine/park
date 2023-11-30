@@ -2,6 +2,9 @@ package com.brunostaine.api.park.web.controller;
 
 import com.brunostaine.api.park.entity.Usuario;
 import com.brunostaine.api.park.services.UsuarioService;
+import com.brunostaine.api.park.web.dto.UsuarioCreateDTO;
+import com.brunostaine.api.park.web.dto.UsuarioResponseDTO;
+import com.brunostaine.api.park.web.dto.mapper.UsuarioMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -17,9 +20,9 @@ public class UsuarioController {
 
     private final UsuarioService usuarioService;
     @PostMapping
-    public ResponseEntity<Usuario> create(@RequestBody Usuario usuario){
-       Usuario user = usuarioService.salvar(usuario);
-       return ResponseEntity.status(HttpStatus.CREATED).body(user);
+    public ResponseEntity<UsuarioResponseDTO> create(@RequestBody UsuarioCreateDTO createDTO){
+       Usuario user = usuarioService.salvar(UsuarioMapper.toUsuario(createDTO));
+       return ResponseEntity.status(HttpStatus.CREATED).body(UsuarioMapper.toDto(user));
     }
 
     @GetMapping("/{id}")
