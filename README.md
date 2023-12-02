@@ -10,6 +10,9 @@ Esse é o projeto de uma API Rest para controle de estacionamento de veículos. 
 - Armazenar dois tipos de usuários Admin e Cliente
 - Armazenar os dados dos clientes
 - Armazenar os dados das vagas
+- Armazenar os dados do estacionamento
+- Autenticação
+- Permissões para tipos de usuários
 
 
 ## :open_file_folder: Tecnologias utilizadas
@@ -31,6 +34,12 @@ Utilize ferramentas como postman ou insominia para testar os endponts
 1. Implementar Tickets
 2. Implementar Relatórios PDFs
 3. Implementar Swagger
+4. Implementar Testes
+5. Implementar Autenticação 
+6. Implementar Permissões de acesso
+7. Implementar Clientes e seus recursos
+8. Implementar Vagas e seus recursos
+9. Implementar Estacionamento e seus recursos
 
 
 ## :globe_with_meridians: Status do projeto
