@@ -241,7 +241,7 @@ public class UsuarioIT {
         org.assertj.core.api.Assertions.assertThat(responseBody.getStatus()).isEqualTo(422);
     }
 
-    // TODO Revisar quero que envie status 400 no código 
+    // TODO Revisar quero que envie status 400 no código
     @Test
     public void editarSenha_ComSenhasInvalidas_RetornarErrorMessageStatus400() {
         ErrorMessage responseBody = testClient
@@ -250,12 +250,12 @@ public class UsuarioIT {
                 .contentType(MediaType.APPLICATION_JSON)
                 .bodyValue(new UsuarioSenhaDTO("123456", "123456", "222222"))
                 .exchange()
-                .expectStatus().isEqualTo(500)
+                .expectStatus().isEqualTo(400)
                 .expectBody(ErrorMessage.class)
                 .returnResult().getResponseBody();
 
         org.assertj.core.api.Assertions.assertThat(responseBody).isNotNull();
-        org.assertj.core.api.Assertions.assertThat(responseBody.getStatus()).isEqualTo(500);
+        org.assertj.core.api.Assertions.assertThat(responseBody.getStatus()).isEqualTo(400);
 
         testClient
                 .patch()
@@ -263,12 +263,12 @@ public class UsuarioIT {
                 .contentType(MediaType.APPLICATION_JSON)
                 .bodyValue(new UsuarioSenhaDTO("222222", "123456", "123456"))
                 .exchange()
-                .expectStatus().isEqualTo(500)
+                .expectStatus().isEqualTo(400)
                 .expectBody(ErrorMessage.class)
                 .returnResult().getResponseBody();
 
         org.assertj.core.api.Assertions.assertThat(responseBody).isNotNull();
-        org.assertj.core.api.Assertions.assertThat(responseBody.getStatus()).isEqualTo(500);
+        org.assertj.core.api.Assertions.assertThat(responseBody.getStatus()).isEqualTo(400);
 
     }
 }

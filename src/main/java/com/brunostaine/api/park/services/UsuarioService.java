@@ -2,6 +2,7 @@ package com.brunostaine.api.park.services;
 
 import com.brunostaine.api.park.entity.Usuario;
 import com.brunostaine.api.park.exceptions.EntityNotFoundException;
+import com.brunostaine.api.park.exceptions.PasswordInvalidException;
 import com.brunostaine.api.park.exceptions.UsernameUniqueViolationException;
 import com.brunostaine.api.park.repository.UsuarioRepository;
 import jakarta.transaction.Transactional;
@@ -31,17 +32,18 @@ public class UsuarioService {
                 () -> new EntityNotFoundException(String.format("Usuário id=%s não encontrado.", id))
         );
     }
+
     @Transactional
     public Usuario editarSenha(Long id, String senhaAtual, String novaSenha, String confirmaSenha) {
-        if(!novaSenha.equals(confirmaSenha)){
-            throw new RuntimeException("Nova senha não confere com confirmação de senha.");
+        if (!novaSenha.equals(confirmaSenha)) {
+            throw new PasswordInvalidException("Nova senha não confere com confirmação de senha.");
         }
 
         Usuario user = buscarPorId(id);
-
-        if(!user.getPassword().equals(senhaAtual)){
-            throw new RuntimeException("Sua senha não confere.");
+        if (!user.getPassword().equals(senhaAtual)) {
+            throw new PasswordInvalidException("Sua senha não confere.");
         }
+
         user.setPassword(novaSenha);
         return user;
     }
