@@ -32,7 +32,7 @@ public class SpringSecurityConfig {
                         .requestMatchers(
                                 antMatcher(HttpMethod.POST, "/api/v1/usuarios"),
                                 antMatcher(HttpMethod.POST, "/api/v1/auth")
-                        ).permitAll()
+                        ).permitAll().anyRequest().authenticated()
                 ).sessionManagement(
                         session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 ).addFilterBefore(
