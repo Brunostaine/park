@@ -1,11 +1,9 @@
 package com.brunostaine.api.park.entity;
 
-import com.brunostaine.api.park.roles.RoleUsuario;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
@@ -28,7 +26,7 @@ public class Usuario implements Serializable {
     private String password;
     @Enumerated(EnumType.STRING)
     @Column(name = "role", nullable = false, length = 25)
-    private RoleUsuario role = RoleUsuario.ROLE_CLIENTE;
+    private Role role = Role.ROLE_CLIENTE;
     @Column(name = "data_criacao")
     private LocalDateTime dataCriacao;
     @Column(name = "data_modificacao")
@@ -37,6 +35,10 @@ public class Usuario implements Serializable {
     private String criadoPor;
     @Column(name = "modificado_por")
     private String modificadoPor;
+
+    public enum Role {
+        ROLE_ADMIN, ROLE_CLIENTE
+    }
 
     @Override
     public boolean equals(Object o) {
