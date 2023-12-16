@@ -2,6 +2,7 @@ package com.brunostaine.api.park.services;
 
 import com.brunostaine.api.park.entity.Cliente;
 import com.brunostaine.api.park.exceptions.CpfUniqueViolationException;
+import com.brunostaine.api.park.exceptions.EntityNotFoundException;
 import com.brunostaine.api.park.repository.ClienteRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -22,5 +23,12 @@ public class ClienteService {
             throw new CpfUniqueViolationException(
                     String.format("CPF '%s' não pode ser cadastrado, já existe no sistema", cliente.getCpf()));
         }
+    }
+
+    @Transactional
+    public Cliente buscarPorId(Long id) {
+        return clienteRepository.findById(id).orElseThrow(
+                () -> new EntityNotFoundException(String.format("Cliente id=%s não encontrado no sistema", id))
+        );
     }
 }
