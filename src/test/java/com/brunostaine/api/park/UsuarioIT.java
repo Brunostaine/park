@@ -313,7 +313,7 @@ public class UsuarioIT {
         org.assertj.core.api.Assertions.assertThat(responseBody).isNotNull();
         org.assertj.core.api.Assertions.assertThat(responseBody.getStatus()).isEqualTo(422);
     }
-    
+
     @Test
     public void editarSenha_ComSenhasInvalidas_RetornarErrorMessageStatus400() {
         ErrorMessage responseBody = testClient

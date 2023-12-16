@@ -31,15 +31,15 @@ Utilize a IDE de sua preferência a que usei foi a InteliJ
 Utilize ferramentas como postman ou insominia para testar os endponts
 
 ## :large_blue_circle: Implementações futuras
-1. Implementar Tickets
-2. Implementar Relatórios PDFs
-3. Implementar Swagger
-4. Implementar Testes
-5. Implementar Autenticação 
-6. Implementar Permissões de acesso
-7. Implementar Clientes e seus recursos
-8. Implementar Vagas e seus recursos
-9. Implementar Estacionamento e seus recursos
+- [ ] Implementar Tickets
+- [ ] Implementar Relatórios PDFs
+- [x] Implementar Swagger
+- [x] Implementar Testes
+- [x] Implementar Autenticação 
+- [x] Implementar Permissões de acesso
+- [ ] Implementar Clientes e seus recursos
+- [ ] Implementar Vagas e seus recursos
+- [ ] Implementar Estacionamento e seus recursos
 
 
 ## :globe_with_meridians: Status do projeto
