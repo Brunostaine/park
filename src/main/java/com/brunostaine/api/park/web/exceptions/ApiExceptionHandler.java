@@ -1,5 +1,6 @@
 package com.brunostaine.api.park.web.exceptions;
 
+import com.brunostaine.api.park.exceptions.CpfUniqueViolationException;
 import com.brunostaine.api.park.exceptions.EntityNotFoundException;
 import com.brunostaine.api.park.exceptions.PasswordInvalidException;
 import com.brunostaine.api.park.exceptions.UsernameUniqueViolationException;
@@ -43,7 +44,7 @@ public class ApiExceptionHandler {
                 .body(new ErrorMessage(request, HttpStatus.NOT_FOUND, ex.getMessage()));
     }
 
-    @ExceptionHandler(UsernameUniqueViolationException.class)
+    @ExceptionHandler({UsernameUniqueViolationException.class, CpfUniqueViolationException.class})
     public ResponseEntity<ErrorMessage> uniqueViolationException(RuntimeException ex,
                                                                         HttpServletRequest request){
 //        log.error("Api error - ", ex);
