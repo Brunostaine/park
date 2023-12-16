@@ -37,8 +37,8 @@ Utilize ferramentas como postman ou insominia para testar os endponts
 - [x] Implementar Testes
 - [x] Implementar Autenticação 
 - [x] Implementar Permissões de acesso
-- [ ] Implementar Clientes e seus recursos
-- [ ] Implementar Vagas e seus recursos
+- [x] Implementar Clientes e seus recursos
+- [x] Implementar Vagas e seus recursos
 - [ ] Implementar Estacionamento e seus recursos
 
 
