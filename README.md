@@ -31,15 +31,15 @@ Utilize a IDE de sua preferência a que usei foi a InteliJ
 Utilize ferramentas como postman ou insominia para testar os endponts
 
 ## :large_blue_circle: Implementações futuras
-- [ ] Implementar Tickets
-- [ ] Implementar Relatórios PDFs
+- [x] Implementar Tickets
+- [x] Implementar Relatórios PDFs
 - [x] Implementar Swagger
 - [x] Implementar Testes
 - [x] Implementar Autenticação 
 - [x] Implementar Permissões de acesso
 - [x] Implementar Clientes e seus recursos
 - [x] Implementar Vagas e seus recursos
-- [ ] Implementar Estacionamento e seus recursos
+- [x] Implementar Estacionamento e seus recursos
 
 
 ## :globe_with_meridians: Status do projeto
@@ -47,10 +47,13 @@ Utilize ferramentas como postman ou insominia para testar os endponts
 ![Badge em Desenvolvimento](https://img.shields.io/static/v1?label=STATUS&message=EM_DESENVOLVIMENTO&color=blue&style=for-the-badge)
 
 ## :mag_right: Referências
-Em breve ...
+- [Spring boot](https://docs.spring.io/spring-framework/reference/index.html)
+- [Swagger](https://swagger.io/docs/)
+- [ModelMapper](https://modelmapper.org/)
+- [Lombok](https://projectlombok.org/features/)
 
 ## :open_file_folder: Imagens
-![img.png](img.png)Em breve ...
+![swagger.png](swagger.png)
 
 ## :construction_worker: Autor
 <img src="https://user-images.githubusercontent.com/87622645/157755137-8d22a951-d323-4c33-814e-c0351ebefafe.png" width=100><br>
