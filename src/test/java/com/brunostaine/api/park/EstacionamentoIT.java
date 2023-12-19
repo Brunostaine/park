@@ -18,7 +18,7 @@ public class EstacionamentoIT {
     WebTestClient testClient;
 
     @Test
-    public void criarCheckin_ComDadosValidos_RetornarCreateAndLocation(){
+    public void criarCheckin_ComDadosValidos_RetornarCreateAndLocation() {
         EstacionamentoCreateDTO createDTO = EstacionamentoCreateDTO.builder()
                 .placa("WER-1111").marca("FIAT").modelo("PALIO 1.0")
                 .cor("AZUL").clienteCpf("09191773016")
@@ -43,7 +43,7 @@ public class EstacionamentoIT {
     }
 
     @Test
-    public void criarCheckin_ComRoleCliente_RetornarErrorComStatus403(){
+    public void criarCheckin_ComRoleCliente_RetornarErrorComStatus403() {
         EstacionamentoCreateDTO createDTO = EstacionamentoCreateDTO.builder()
                 .placa("WER-1111").marca("FIAT").modelo("PALIO 1.0")
                 .cor("AZUL").clienteCpf("09191773016")
@@ -63,7 +63,7 @@ public class EstacionamentoIT {
     }
 
     @Test
-    public void criarCheckin_ComDadosInvalidos_RetornarErrorComStatus422(){
+    public void criarCheckin_ComDadosInvalidos_RetornarErrorComStatus422() {
         EstacionamentoCreateDTO createDTO = EstacionamentoCreateDTO.builder()
                 .placa("").marca("").modelo("")
                 .cor("").clienteCpf("")
@@ -83,7 +83,7 @@ public class EstacionamentoIT {
     }
 
     @Test
-    public void criarCheckin_ComCpfInexistente_RetornarErrorComStatus404(){
+    public void criarCheckin_ComCpfInexistente_RetornarErrorComStatus404() {
         EstacionamentoCreateDTO createDTO = EstacionamentoCreateDTO.builder()
                 .placa("WER-1111").marca("FIAT").modelo("PALIO 1.0")
                 .cor("AZUL").clienteCpf("33838667000")
@@ -105,7 +105,7 @@ public class EstacionamentoIT {
     @Sql(scripts = "/sql/estacionamentos/estacionamento-insert-vagas-ocupadas.sql", executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
     @Sql(scripts = "/sql/estacionamentos/estacionamento-delete-vagas-ocupadas.sql", executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
     @Test
-    public void criarCheckin_ComVagasOcupadas_RetornarErrorComStatus404(){
+    public void criarCheckin_ComVagasOcupadas_RetornarErrorComStatus404() {
         EstacionamentoCreateDTO createDTO = EstacionamentoCreateDTO.builder()
                 .placa("WER-1111").marca("FIAT").modelo("PALIO 1.0")
                 .cor("AZUL").clienteCpf("09191773016")
@@ -122,5 +122,51 @@ public class EstacionamentoIT {
                 .jsonPath("path").isEqualTo("/api/v1/estacionamentos/check-in")
                 .jsonPath("method").isEqualTo("POST");
 
+    }
+
+    @Test
+    public void buscarCheckin_ComPerfilAdmin_RetornarDadosComStatus200() {
+        testClient.get().uri("/api/v1/estacionamentos/check-in/{recibo}", "20230313-101300")
+                .headers(JwtAuthentication.getHeaderAuthorization(testClient, "ana@email.com.br", "123456"))
+                .exchange()
+                .expectStatus().isOk()
+                .expectBody()
+                .jsonPath("placa").isEqualTo("FIT-1020")
+                .jsonPath("marca").isEqualTo("FIAT")
+                .jsonPath("modelo").isEqualTo("PALIO")
+                .jsonPath("cor").isEqualTo("VERDE")
+                .jsonPath("clienteCpf").isEqualTo("98401203015")
+                .jsonPath("recibo").isEqualTo("20230313-101300")
+                .jsonPath("dataEntrada").isEqualTo("2023-03-13 01:15:00")
+                .jsonPath("vagaCodigo").isEqualTo("A-01");
+    }
+
+    @Test
+    public void buscarCheckin_ComPerfilCliente_RetornarDadosComStatus200() {
+        testClient.get().uri("/api/v1/estacionamentos/check-in/{recibo}", "20230313-101300")
+                .headers(JwtAuthentication.getHeaderAuthorization(testClient, "bob@email.com.br", "123456"))
+                .exchange()
+                .expectStatus().isOk()
+                .expectBody()
+                .jsonPath("placa").isEqualTo("FIT-1020")
+                .jsonPath("marca").isEqualTo("FIAT")
+                .jsonPath("modelo").isEqualTo("PALIO")
+                .jsonPath("cor").isEqualTo("VERDE")
+                .jsonPath("clienteCpf").isEqualTo("98401203015")
+                .jsonPath("recibo").isEqualTo("20230313-101300")
+                .jsonPath("dataEntrada").isEqualTo("2023-03-13 01:15:00")
+                .jsonPath("vagaCodigo").isEqualTo("A-01");
+    }
+
+    @Test
+    public void buscarCheckin_ComReciboInexistente_RetornarErrorComStatus404() {
+        testClient.get().uri("/api/v1/estacionamentos/check-in/{recibo}", "20230313-999999")
+                .headers(JwtAuthentication.getHeaderAuthorization(testClient, "bob@email.com.br", "123456"))
+                .exchange()
+                .expectStatus().isNotFound()
+                .expectBody()
+                .jsonPath("status").isEqualTo("404")
+                .jsonPath("path").isEqualTo("/api/v1/estacionamentos/check-in/20230313-999999")
+                .jsonPath("method").isEqualTo("GET");
     }
 }
