@@ -3,7 +3,10 @@ package com.brunostaine.api.park.services;
 import com.brunostaine.api.park.entity.ClienteVaga;
 import com.brunostaine.api.park.exceptions.EntityNotFoundException;
 import com.brunostaine.api.park.repository.ClienteVagaRepository;
+import com.brunostaine.api.park.repository.projection.ClienteVagaProjection;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -27,5 +30,10 @@ public class ClienteVagaService {
     @Transactional(readOnly = true)
     public long getTotalDeVezesEstacionamentoCompleto(String cpf) {
         return clienteVagaRepository.countByClienteCpfAndDataSaidaIsNotNull(cpf);
+    }
+
+    @Transactional(readOnly = true)
+    public Page<ClienteVagaProjection> buscarTodosPorClienteCpf(String cpf, Pageable pageable) {
+        return clienteVagaRepository.findAllByClienteCpf(cpf, pageable);
     }
 }

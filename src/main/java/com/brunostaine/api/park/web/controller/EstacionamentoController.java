@@ -1,16 +1,20 @@
 package com.brunostaine.api.park.web.controller;
 
 import com.brunostaine.api.park.entity.ClienteVaga;
+import com.brunostaine.api.park.repository.projection.ClienteVagaProjection;
 import com.brunostaine.api.park.services.ClienteVagaService;
 import com.brunostaine.api.park.services.EstacionamentoService;
 import com.brunostaine.api.park.web.dto.EstacionamentoCreateDTO;
 import com.brunostaine.api.park.web.dto.EstacionamentoResponseDTO;
+import com.brunostaine.api.park.web.dto.PageableDTO;
 import com.brunostaine.api.park.web.dto.mapper.ClienteVagaMapper;
+import com.brunostaine.api.park.web.dto.mapper.PageableMapper;
 import com.brunostaine.api.park.web.exceptions.ErrorMessage;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.enums.ParameterIn;
 import io.swagger.v3.oas.annotations.headers.Header;
+import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -18,6 +22,10 @@ import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -114,6 +122,42 @@ public class EstacionamentoController {
     public ResponseEntity<EstacionamentoResponseDTO> checkout(@PathVariable String recibo) {
         ClienteVaga clienteVaga = estacionamentoService.checkOut(recibo);
         EstacionamentoResponseDTO dto = ClienteVagaMapper.toDto(clienteVaga);
+        return ResponseEntity.ok(dto);
+    }
+
+    @Operation(summary = "Localizar os registros de estacionamentos do cliente por CPF", description = "Localizar os " +
+            "registros de estacionamentos do cliente por CPF. Requisição exige uso de um bearer token.",
+            security = @SecurityRequirement(name = "security"),
+            parameters = {
+                    @Parameter(in = ParameterIn.PATH, name = "cpf", description = "Nº do CPF referente ao cliente a ser consultado",
+                            required = true
+                    ),
+                    @Parameter(in = ParameterIn.QUERY, name = "page", description = "Representa a página retornada",
+                            content = @Content(schema = @Schema(type = "integer", defaultValue = "0"))
+                    ),
+                    @Parameter(in = ParameterIn.QUERY, name = "size", description = "Representa o total de elementos por página",
+                            content = @Content(schema = @Schema(type = "integer", defaultValue = "5"))
+                    ),
+                    @Parameter(in = ParameterIn.QUERY, name = "sort", description = "Campo padrão de ordenação 'dataEntrada,asc'. ",
+                            array = @ArraySchema(schema = @Schema(type = "string", defaultValue = "dataEntrada,asc")),
+                            hidden = true
+                    )
+            },
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "Recurso localizado com sucesso",
+                            content = @Content(mediaType = " application/json;charset=UTF-8",
+                                    schema = @Schema(implementation = PageableDTO.class))),
+                    @ApiResponse(responseCode = "403", description = "Recurso não permito ao perfil de CLIENTE",
+                            content = @Content(mediaType = " application/json;charset=UTF-8",
+                                    schema = @Schema(implementation = ErrorMessage.class)))
+            })
+    @GetMapping("/cpf/{cpf}")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<PageableDTO> getAllEstacionamentosPorCpf(@PathVariable String cpf, @Parameter(hidden = true)
+    @PageableDefault(size = 5, sort = "dataEntrada",
+            direction = Sort.Direction.ASC) Pageable pageable) {
+        Page<ClienteVagaProjection> projection = clienteVagaService.buscarTodosPorClienteCpf(cpf, pageable);
+        PageableDTO dto = PageableMapper.toDto(projection);
         return ResponseEntity.ok(dto);
     }
 }
